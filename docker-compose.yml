@@ -1,13 +1,21 @@
-conveyor:
+server:
   build: ./
   env_file: .env
   volumes:
     - "/var/run/docker.sock:/var/run/docker.sock"
   ports:
     - "8080:8080"
+  command: server
+
+worker:
+  build: ./
+  env_file: .env
+  volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock"
+  command: worker
 
 sqs_fetcher:
   image: bssdk/conveyor-sqs-fetcher
   env_file: .env
   links:
-    - conveyor:conveyor
+    - server:conveyor
